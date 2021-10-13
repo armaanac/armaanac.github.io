@@ -49,18 +49,21 @@ def compile_headers(line):
     '''
 
     if line[0:6] == '######':
-        line = '<h6>'+ line[6:] + '</h6>'
-    if line[0:5] == '#####':
-        line = '<h5>'+ line[5:] + '</h5>'
-    if line[0:4] == '####':
-        line = '<h4>'+ line[4:] + '</h4>'
-    if line[0:3] == '###':
-        line = '<h3>'+ line[3:] + '</h3>'
-    if line[0:2] == '##':
-        line = '<h2>'+ line[2:] + '</h2>'
-    if line[0:1] == '#':
-        line = '<h1>'+ line[1:] + '</h1>'
-    return line
+        new_line = '<h6>'+ line[6:] + '</h6>'
+    elif line[0:5] == '#####':
+        new_line = '<h5>'+ line[5:] + '</h5>'
+    elif line[0:4] == '####':
+        new_line = '<h4>'+ line[4:] + '</h4>'
+    elif line[0:3] == '###':
+        new_line = '<h3>'+ line[3:] + '</h3>'
+    elif line[0:2] == '##':
+        new_line = '<h2>'+ line[2:] + '</h2>'
+    elif line[0:1] == '#':
+        new_line = '<h1>'+ line[1:] + '</h1>'
+    else:
+        new_line = line
+
+    return new_line
 
 def compile_italic_star(line):
     '''
@@ -594,13 +597,18 @@ def minify(html):
     'a b'
     '''
 
-    accumulator = ''
-    for i in html:
-        if not i.isspace() and i:
-            accumulator+= i
-            accumulator += ' '
-    accumulator = accumulator[:-1]
-    return accumulator
+
+    html2 = ''
+    lastchar = None
+    for char in html:
+        if not char.isspace():
+            html2 += char
+        elif not (lastchar and lastchar.isspace() and char.isspace()):
+            html2 += ' '
+        
+        lastchar = char
+
+    return html2.strip()
 
 
 def convert_file(input_file, add_css):
