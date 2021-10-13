@@ -338,6 +338,24 @@ def compile_images(line):
     >>> compile_images('This is an image of Mike Izbicki: ![Mike Izbicki](https://avatars1.githubusercontent.com/u/1052630?v=2&s=460)')
     'This is an image of Mike Izbicki: <img src="https://avatars1.githubusercontent.com/u/1052630?v=2&s=460" alt="Mike Izbicki" />'
     '''
+
+    left_square = line.find('[')
+    right_square = line.find (']')
+    left_paren = line.find('(')
+    right_paren = line.find (')')
+
+    if left_square >= 0 and right_square >= 0 and left_paren >= 0 and right_paren >= 0:
+        if left_square < right_square == left_paren-1 < right_paren and line[left_square-1]== '!':
+            new_line = line[:left_square-1]+'<img src="'+line[left_paren+1:right_paren]+ '" alt="'+line[left_square+1:right_square]+'" />'+line[right_paren+1:]
+            
+            return new_line
+
+    return line
+
+
+
+
+'''
     start_index = None
     stop_index = None
     start_index1 = None
@@ -375,6 +393,7 @@ def compile_images(line):
         new_line = line
 
     return new_line
+'''
 
 def compile_lines(text):
     r'''
